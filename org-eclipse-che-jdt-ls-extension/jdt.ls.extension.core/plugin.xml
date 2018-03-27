@@ -38,6 +38,7 @@
             <command id="che.jdt.ls.extension.configuration.getPreferences"/>
             <command id="che.jdt.ls.extension.configuration.updatePreferences"/>
             <command id="che.jdt.ls.extension.import.organizeImports"/>
+            <command id="che.jdt.ls.extension.refactoring.rename"/>
         </delegateCommandHandler>
     </extension>
     <extension

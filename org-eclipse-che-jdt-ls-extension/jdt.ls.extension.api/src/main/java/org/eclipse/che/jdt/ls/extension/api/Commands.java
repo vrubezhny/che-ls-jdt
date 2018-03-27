@@ -82,5 +82,9 @@ public class Commands {
 
   public static final String ORGANIZE_IMPORTS = "che.jdt.ls.extension.import.organizeImports";
 
+  // Refactoring
+
+  public static final String RENAME_COMMAND = "che.jdt.ls.extension.refactoring.rename";
+
   private Commands() {}
 }
