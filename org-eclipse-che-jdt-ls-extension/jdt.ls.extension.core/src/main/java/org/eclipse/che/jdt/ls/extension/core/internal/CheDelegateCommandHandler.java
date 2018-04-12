@@ -34,7 +34,7 @@ import org.eclipse.che.jdt.ls.extension.core.internal.pom.EffectivePomHandler;
 import org.eclipse.che.jdt.ls.extension.core.internal.pom.GetMavenProjectsCommand;
 import org.eclipse.che.jdt.ls.extension.core.internal.pom.ReImportMavenProjectsHandler;
 import org.eclipse.che.jdt.ls.extension.core.internal.pom.RecomputePomDiagnosticsCommand;
-import org.eclipse.che.jdt.ls.extension.core.internal.rename.RenameCommand;
+import org.eclipse.che.jdt.ls.extension.core.internal.refactoring.rename.RenameCommand;
 import org.eclipse.che.jdt.ls.extension.core.internal.testdetection.TestDetectionHandler;
 import org.eclipse.che.jdt.ls.extension.core.internal.testdetection.TestFinderHandler;
 import org.eclipse.core.runtime.IProgressMonitor;
