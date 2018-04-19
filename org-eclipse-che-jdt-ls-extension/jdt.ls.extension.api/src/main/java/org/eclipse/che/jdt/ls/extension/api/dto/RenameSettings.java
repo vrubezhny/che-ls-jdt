@@ -19,13 +19,13 @@ import org.eclipse.lsp4j.RenameParams;
  */
 public class RenameSettings {
   private RenameParams renameParams;
-  private boolean isDelegateUpdating;
-  private boolean isDeprecateDelegates;
-  private boolean isUpdateQualifiedNames;
-  private boolean isUpdateSubpackages;
-  private boolean isUpdateReferences;
-  private boolean isUpdateSimilarDeclarations;
-  private boolean isUpdateTextualMatches;
+  private boolean delegateUpdating;
+  private boolean deprecateDelegates;
+  private boolean updateQualifiedNames;
+  private boolean updateSubpackages;
+  private boolean updateReferences;
+  private boolean updateSimilarDeclarations;
+  private boolean updateTextualMatches;
   private int machStrategy;
   private String filePatterns;
 
@@ -44,11 +44,11 @@ public class RenameSettings {
    * This value used to set whether to create delegates.
    */
   public boolean isDelegateUpdating() {
-    return isDelegateUpdating;
+    return delegateUpdating;
   }
 
-  public void setDelegateUpdating(boolean isDelegateUpdating) {
-    this.isDelegateUpdating = isDelegateUpdating;
+  public void setDelegateUpdating(boolean delegateUpdating) {
+    this.delegateUpdating = delegateUpdating;
   }
 
   /**
@@ -56,11 +56,11 @@ public class RenameSettings {
    * This value used to set whether to deprecate delegates.
    */
   public boolean isDeprecateDelegates() {
-    return isDeprecateDelegates;
+    return deprecateDelegates;
   }
 
   public void setDeprecateDelegates(boolean delegates) {
-    this.isDeprecateDelegates = isDeprecateDelegates;
+    this.deprecateDelegates = deprecateDelegates;
   }
 
   // IQualifiedNameUpdating
@@ -71,11 +71,11 @@ public class RenameSettings {
    * updated.
    */
   public boolean isUpdateQualifiedNames() {
-    return isUpdateQualifiedNames;
+    return updateQualifiedNames;
   }
 
   public void setUpdateQualifiedNames(boolean update) {
-    this.isUpdateQualifiedNames = isUpdateQualifiedNames;
+    this.updateQualifiedNames = updateQualifiedNames;
   }
 
   public String getFilePatterns() {
@@ -95,11 +95,11 @@ public class RenameSettings {
    * @return <code>true</code> if subpackages updating is enabled
    */
   public boolean isUpdateSubpackages() {
-    return isUpdateSubpackages;
+    return updateSubpackages;
   }
 
-  public void setUpdateSubpackages(boolean isUpdateSubpackages) {
-    this.isUpdateSubpackages = isUpdateSubpackages;
+  public void setUpdateSubpackages(boolean updateSubpackages) {
+    this.updateSubpackages = updateSubpackages;
   }
 
   // IReferenceUpdating
@@ -109,11 +109,11 @@ public class RenameSettings {
    * </code> iff reference updating is enabled
    */
   public boolean isUpdateReferences() {
-    return isUpdateReferences;
+    return updateReferences;
   }
 
-  public void setUpdateReferences(boolean update) {
-    this.isUpdateReferences = isUpdateReferences;
+  public void setUpdateReferences(boolean updateReferences) {
+    this.updateReferences = updateReferences;
   }
 
   // ISimilarDeclarationUpdating
@@ -126,11 +126,11 @@ public class RenameSettings {
    * @return
    */
   public boolean isUpdateSimilarDeclarations() {
-    return isUpdateSimilarDeclarations;
+    return updateSimilarDeclarations;
   }
 
-  public void setUpdateSimilarDeclarations(boolean isUpdateSimilarDeclarations) {
-    this.isUpdateSimilarDeclarations = isUpdateSimilarDeclarations;
+  public void setUpdateSimilarDeclarations(boolean updateSimilarDeclarations) {
+    this.updateSimilarDeclarations = updateSimilarDeclarations;
   }
 
   /** method is used to set the match strategy for determining similarly named elements. */
@@ -153,11 +153,11 @@ public class RenameSettings {
    * JavaDoc) comments and string literals should be updated.
    */
   public boolean isUpdateTextualMatches() {
-    return isUpdateTextualMatches;
+    return updateTextualMatches;
   }
 
-  public void setUpdateTextualMatches(boolean isUpdateTextualMatches) {
-    this.isUpdateTextualMatches = isUpdateTextualMatches;
+  public void setUpdateTextualMatches(boolean updateTextualMatches) {
+    this.updateTextualMatches = updateTextualMatches;
   }
 
   enum MachStrategy {

@@ -34,7 +34,10 @@ import org.eclipse.che.jdt.ls.extension.core.internal.pom.EffectivePomHandler;
 import org.eclipse.che.jdt.ls.extension.core.internal.pom.GetMavenProjectsCommand;
 import org.eclipse.che.jdt.ls.extension.core.internal.pom.ReImportMavenProjectsHandler;
 import org.eclipse.che.jdt.ls.extension.core.internal.pom.RecomputePomDiagnosticsCommand;
+import org.eclipse.che.jdt.ls.extension.core.internal.refactoring.rename.GetLinkedModelCommand;
+import org.eclipse.che.jdt.ls.extension.core.internal.refactoring.rename.GetRenameWizardType;
 import org.eclipse.che.jdt.ls.extension.core.internal.refactoring.rename.RenameCommand;
+import org.eclipse.che.jdt.ls.extension.core.internal.refactoring.rename.ValidateNewNameCommand;
 import org.eclipse.che.jdt.ls.extension.core.internal.testdetection.TestDetectionHandler;
 import org.eclipse.che.jdt.ls.extension.core.internal.testdetection.TestFinderHandler;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -88,6 +91,9 @@ public class CheDelegateCommandHandler implements IDelegateCommandHandler {
     commands.put(Commands.UPDATE_PREFERENCES_СOMMAND, UpdatePreferencesCommand::execute);
     commands.put(Commands.ORGANIZE_IMPORTS, OrganizeImportsCommand::execute);
     commands.put(Commands.RENAME_COMMAND, RenameCommand::execute);
+    commands.put(Commands.GET_RENAME_TYPE_COMMAND, GetRenameWizardType::execute);
+    commands.put(Commands.VALIDATE_RENAMED_NAME_COMMAND, ValidateNewNameCommand::execute);
+    commands.put(Commands.GET_LINKED_MODE_COMMAND, GetLinkedModelCommand::execute);
   }
 
   @Override
