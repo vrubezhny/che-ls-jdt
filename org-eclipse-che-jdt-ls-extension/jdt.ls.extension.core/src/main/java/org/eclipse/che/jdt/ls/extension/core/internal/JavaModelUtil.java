@@ -46,11 +46,17 @@ public class JavaModelUtil {
    *     a Java project
    */
   public static IJavaProject getJavaProject(String resourceUri) {
+    JavaLanguageServerPlugin.logError("JavaModelUtil.getJavaProject(" + resourceUri + "): start");
+    JavaLanguageServerPlugin.logError(
+        "JavaModelUtil.getJavaProject(): JDTUtils.toURI(resourceUri): "
+            + String.valueOf(JDTUtils.toURI(resourceUri)));
     IResource resource =
         JDTUtils.findResource(
             JDTUtils.toURI(resourceUri),
             ResourcesPlugin.getWorkspace().getRoot()::findContainersForLocationURI);
-
+    JavaLanguageServerPlugin.logError(
+        "JavaModelUtil.getJavaProject(): resource: "
+            + (resource == null ? "NULL" : resource.getName()));
     return resource != null ? JavaCore.create(resource.getProject()) : null;
   }
 

@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ls.core.internal.JavaLanguageServerPlugin;
 
 /**
  * Computes source folders of the project.
@@ -37,15 +38,41 @@ public class GetSourceFoldersCommand {
    * @return list of source folders
    */
   public static List<String> execute(List<Object> arguments, IProgressMonitor pm) {
+    JavaLanguageServerPlugin.logInfo(
+        getCallStack(
+            "[" + System.currentTimeMillis() + "] >> GetSourceFoldersCommand.execute(): start"));
+
     Preconditions.checkArgument(arguments.size() >= 1, "Project uri is expected");
     final String projectUri = (String) arguments.get(0);
 
+    JavaLanguageServerPlugin.logInfo(
+        "["
+            + System.currentTimeMillis()
+            + "] >> GetSourceFoldersCommand.execute(): projectUri: "
+            + projectUri);
+
     IJavaProject jProject = JavaModelUtil.getJavaProject(projectUri);
+    JavaLanguageServerPlugin.logInfo(
+        "["
+            + System.currentTimeMillis()
+            + "] >> GetSourceFoldersCommand.execute(): project: "
+            + (jProject == null
+                ? "NULL"
+                : jProject.getElementName()
+                    + " ("
+                    + jProject.getProject().getLocation().toString()
+                    + ")")
+            + ", hash: "
+            + (jProject == null ? "NULL" : jProject.hashCode())
+            + "["
+            + System.currentTimeMillis()
+            + "]");
 
     if (jProject == null) {
       throw new IllegalArgumentException(format("Project for '%s' not found", projectUri));
     }
 
+    String cpSourceEntries = "\n\tSourceEntries:";
     List<String> sourceFolders = new ArrayList<>();
     IClasspathEntry[] classpath;
     try {
@@ -56,8 +83,29 @@ public class GetSourceFoldersCommand {
     for (IClasspathEntry entry : classpath) {
       if (CPE_SOURCE == entry.getEntryKind()) {
         sourceFolders.add(JavaModelUtil.getFolderLocation(entry.getPath()));
+        cpSourceEntries += "\n\t\t" + entry.getPath();
       }
     }
+
+    JavaLanguageServerPlugin.logInfo(
+        "["
+            + System.currentTimeMillis()
+            + "] >> GetSourceFoldersCommand.execute(): projectUri: "
+            + projectUri
+            + cpSourceEntries);
+
+    JavaLanguageServerPlugin.logInfo(
+        "[" + System.currentTimeMillis() + "] >> GetSourceFoldersCommand.execute(): done");
     return sourceFolders;
+  }
+
+  public static String getCallStack(String msg) {
+    Exception e = new Exception(msg);
+    StackTraceElement[] stElements = e.getStackTrace();
+    String result = msg + ":";
+    for (StackTraceElement ste : stElements) {
+      result += "\n\t" + ste.toString();
+    }
+    return result;
   }
 }

@@ -55,6 +55,7 @@ public class Commands {
   public static final String USAGES_COMMAND = "che.jdt.ls.extension.usages";
 
   public static final String UPDATE_WORKSPACE = "che.jdt.ls.extension.updateWorkspace";
+  public static final String REFRESH_WORKSPACE = "che.jdt.ls.extension.refreshWorkspace";
 
   // simple java project
 
@@ -106,6 +107,8 @@ public class Commands {
   // Project updater
   public static final String CLIENT_UPDATE_PROJECT =
       "che.jdt.ls.extension.workspace.clientUpdateProject";
+  public static final String CLIENT_UPDATE_ON_PROJECT_CLASSPATH_CHANGED =
+      "che.jdt.ls.extension.workspace.clientUpdateOnProjectClasspathChanged";
 
   private Commands() {}
 }

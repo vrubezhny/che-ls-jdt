@@ -35,12 +35,14 @@ import org.eclipse.che.jdt.ls.extension.core.internal.GsonUtils;
 import org.eclipse.che.jdt.ls.extension.core.internal.JavaModelUtil;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ls.core.internal.JavaLanguageServerPlugin;
 
 /**
  * The command for updating .classpath for simple java project.
@@ -49,6 +51,12 @@ import org.eclipse.jdt.core.JavaModelException;
  */
 public class UpdateProjectClasspathCommand {
   private static final Gson gson = GsonUtils.getInstance();
+  
+  /**
+   * Depth constant (value 2) indicating this resource and its direct and indirect members at any
+   * depth.
+   */
+  public static final int DEPTH_INFINITE = 2;
 
   /**
    * Updates .classpath in the given simple java project.
@@ -60,6 +68,8 @@ public class UpdateProjectClasspathCommand {
    */
   public static Object execute(List<Object> arguments, IProgressMonitor pm) {
     Preconditions.checkArgument(arguments.size() >= 1, "Information about .classpath is expected");
+    JavaLanguageServerPlugin.logInfo(
+        "[" + System.currentTimeMillis() + "] >> UpdateProjectClasspathCommand.execute(): start");
 
     UpdateClasspathParameters parameters =
         gson.fromJson(gson.toJson(arguments.get(0)), UpdateClasspathParameters.class);
@@ -67,7 +77,35 @@ public class UpdateProjectClasspathCommand {
     final String projectUri = parameters.getProjectUri();
     final List<ClasspathEntry> entries = parameters.getEntries();
 
+    String cpSourceEntries = "\n\tSourceEntries:";
+    for (ClasspathEntry e : entries) {
+      if (e.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
+        cpSourceEntries += "\n\t\t" + e.getPath();
+      }
+    }
+    JavaLanguageServerPlugin.logInfo(
+        "["
+            + System.currentTimeMillis()
+            + "] >> UpdateProjectClasspathCommand.execute(): projectUri: "
+            + projectUri
+            + cpSourceEntries);
+
     IJavaProject jProject = JavaModelUtil.getJavaProject(projectUri);
+    JavaLanguageServerPlugin.logInfo(
+        "["
+            + System.currentTimeMillis()
+            + "] >> UpdateProjectClasspathCommand.execute(): project: "
+            + (jProject == null
+                ? "NULL"
+                : jProject.getElementName()
+                    + " ("
+                    + jProject.getProject().getLocation().toString()
+                    + ")")
+            + ", hash: "
+            + (jProject == null ? "NULL" : jProject.hashCode())
+            + "["
+            + System.currentTimeMillis()
+            + "]");
 
     if (jProject == null) {
       throw new IllegalArgumentException(format("Project for '%s' not found", projectUri));
@@ -75,10 +113,13 @@ public class UpdateProjectClasspathCommand {
 
     try {
       jProject.setRawClasspath(createModifiedEntry(entries), jProject.getOutputLocation(), pm);
+//      ResourcesPlugin.getWorkspace().getRoot().refreshLocal(DEPTH_INFINITE, null);
     } catch (JavaModelException e) {
       throw new RuntimeException(e);
     }
 
+    JavaLanguageServerPlugin.logInfo(
+        "[" + System.currentTimeMillis() + "] >> UpdateProjectClasspathCommand.execute(): done");
     return projectUri;
   }
 
@@ -122,6 +163,14 @@ public class UpdateProjectClasspathCommand {
         ResourcesPlugin.getWorkspace().getRoot().findContainersForLocationURI(new URI(uri));
     if (folders.length == 0) {
       throw new IllegalArgumentException("no folders found for " + uri);
+    }
+    
+    if (!folders[0].isSynchronized(0)) {
+    	try {
+			folders[0].refreshLocal(0, null);
+		} catch (CoreException e) {
+		      throw new RuntimeException(e);
+		}
     }
     return folders[0].getFullPath();
   }

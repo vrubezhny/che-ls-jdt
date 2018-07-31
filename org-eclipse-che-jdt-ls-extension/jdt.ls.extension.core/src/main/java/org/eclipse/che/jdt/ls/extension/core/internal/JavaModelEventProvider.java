@@ -49,8 +49,11 @@ public class JavaModelEventProvider implements IElementChangedListener {
 
   @Override
   public void elementChanged(ElementChangedEvent event) {
+    JavaLanguageServerPlugin.logInfo(">> JavaModelEventProvider.elementChanged(): start");
     Set<IProject> projects = getAffectedProjects(event.getDelta(), new HashSet<>());
     if (projects.isEmpty()) {
+      JavaLanguageServerPlugin.logInfo(
+          ">> JavaModelEventProvider.elementChanged(): done. No affected projects were found");
       return;
     }
 
@@ -70,6 +73,7 @@ public class JavaModelEventProvider implements IElementChangedListener {
       JavaLanguageServerPlugin.logException(
           "An exception occured while reporting project CLASSPATH change", e);
     }
+    JavaLanguageServerPlugin.logInfo(">> JavaModelEventProvider.elementChanged(): done.");
   }
 
   private Set<IProject> getAffectedProjects(

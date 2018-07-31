@@ -118,6 +118,10 @@ public class ResolveClassPathsHandler {
 
   private static List<ClasspathEntry> convertClasspathEntriesToDTO(
       IJavaProject javaProject, IClasspathEntry[] entries) throws JavaModelException {
+    JavaLanguageServerPlugin.logInfo(
+        ">> ResolveClassPathsHandler.convertClasspathEntriesToDTO("
+            + javaProject.getElementName()
+            + "): start");
     List<ClasspathEntry> entriesDTO = new ArrayList<>(entries.length);
     for (IClasspathEntry entry : entries) {
       if (IClasspathEntry.CPE_CONTAINER == entry.getEntryKind()) {
@@ -128,10 +132,19 @@ public class ResolveClassPathsHandler {
         container.setPath(entry.getPath().toOSString());
         container.setChildren(convertClasspathEntriesToDTO(javaProject, subEntries));
         entriesDTO.add(container);
+        JavaLanguageServerPlugin.logInfo(
+            ">> ResolveClassPathsHandler.convertClasspathEntriesToDTO("
+                + javaProject.getElementName()
+                + "): CPE_CONTAINER: "
+                + entry.getPath());
       } else {
         entriesDTO.add(convertSimpleEntry(entry));
       }
     }
+    JavaLanguageServerPlugin.logInfo(
+        ">> ResolveClassPathsHandler.convertClasspathEntriesToDTO("
+            + javaProject.getElementName()
+            + "): done");
 
     return entriesDTO;
   }
